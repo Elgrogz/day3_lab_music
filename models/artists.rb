@@ -1,5 +1,5 @@
 require('pg')
-
+require_relative('../db/sql_runner')
 class Artist
   attr_accessor :name, :nationality
   attr_reader :id
@@ -7,10 +7,31 @@ class Artist
   def initialize(options)
     @name = options['name']
     @nationality = options['nationality']
-    @id = options['id']to_i if options['id'] 
+    @id = options['id'].to_i if options['id'] 
   end
 
   def save()
-    sql = 
+    sql = "INSERT INTO artists (name, nationality) VALUES ('#{@name}', '#{@nationality}') returning *;"
+    result = SqlRunner.run( sql )
+    @id = result[0]['id'].to_i
   end
+
+  def delete
+    return unless @id
+    sql = "DELETE FROM artists WHERE id = '#{@id}'"
+    result = SqlRunner.run( sql )
+  end
+
+
+  def self.delete_all
+    sql = "DELETE FROM artists;"
+    artists = SqlRunner.run( sql )
+    return artists.map { |hash| Artist.new(hash) }
+  end
+
+ def self.all
+   sql = "SELECT * FROM artists;"
+   artists = SqlRunner.run( sql )
+   return artists.map { |hash| Artist.new(hash) }
+ end
 end
