@@ -1,4 +1,5 @@
 require('pg')
+require('pry-byebug')
 require_relative('../db/sql_runner')
 class Artist
   attr_accessor :name, :nationality
@@ -14,6 +15,7 @@ class Artist
     sql = "INSERT INTO artists (name, nationality) VALUES ('#{@name}', '#{@nationality}') returning *;"
     result = SqlRunner.run( sql )
     @id = result[0]['id'].to_i
+
   end
 
   def delete
