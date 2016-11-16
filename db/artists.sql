@@ -3,7 +3,8 @@ DROP TABLE IF EXITS artists;
 
 CREATE TABLE artists (
   id SERIAL8 primary key,
-  name VARCHAR(255) NOT NULL
+  name VARCHAR(255) NOT NULL,
+  nationality VARCHAR(255)
 );
 
 CREATE TABLE albums (
