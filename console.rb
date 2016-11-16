@@ -1,9 +1,9 @@
 require('pry-byebug')
 require_relative('models/artists')
 require_relative('models/albums')
-Artist.delete_all
-Album.delete_all
 
+Album.delete_all
+Artist.delete_all
 
 artist1 = Artist.new({
   'name' => 'ACDC',
@@ -27,8 +27,10 @@ album1 = Album.new({
 album2 = Album.new({
   'title' => 'live in Rio',
   'genre' => 'rock',
-  'artist_id' => artist1.id
+  'artist_id' => artist2.id
   })
+
+
 
 album1.save()
 album2.save()
@@ -39,3 +41,8 @@ album2.save()
 
 binding.pry
 nil
+
+
+#extension artist ---> album (one to many)
+
+#maybe add songs to albums, add a function to count albums, songs, price of albums
