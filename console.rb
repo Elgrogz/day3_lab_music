@@ -17,5 +17,8 @@ artist2 = Artist.new({
 artist1.save
 artist2.save
 
+# artist2.name = 'Nirvana'
+# artist2.update
+
 binding.pry
 nil
