@@ -1,6 +1,7 @@
 require('pg')
 require('pry-byebug')
 require_relative('../db/sql_runner')
+
 class Artist
   attr_accessor :name, :nationality
   attr_reader :id
@@ -13,40 +14,44 @@ class Artist
 
   def save()
     sql = "INSERT INTO artists (name, nationality) VALUES ('#{@name}', '#{@nationality}') returning *;"
-    result = SqlRunner.run( sql )
+    result = SqlRunner.run(sql)
     @id = result[0]['id'].to_i
-
   end
 
   def delete
     return unless @id
-    sql = "DELETE FROM artists WHERE id = '#{@id}'"
-    result = SqlRunner.run( sql )
+    sql = "DELETE FROM artists WHERE id = (#{@id})"
+    result = SqlRunner.run(sql)
   end
 
   def update
     sql = "UPDATE artists SET (name) = ('#{@name}') WHERE id = (#{@id})"
-    result = SqlRunner.run( sql )
+    result = SqlRunner.run(sql)
   end
 
 
   def self.delete_all
     sql = "DELETE FROM artists;"
-    artists = SqlRunner.run( sql )
-    return artists.map { |hash| Artist.new(hash) }
+    artists = SqlRunner.run(sql)
+    return artists.map {|artist| Artist.new(artist)}
   end
 
   def self.all
     sql = "SELECT * FROM artists;"
-    artists = SqlRunner.run( sql )
-    return artists.map { |hash| Artist.new(hash) }
+    artists = SqlRunner.run(sql)
+    return artists.map {|artist| Artist.new(artist)}
   end
  
   def album
     sql = "SELECT * FROM albums WHERE artist_id = (#{@id});"
-    result = SqlRunner.run( sql )
-    albums = result.map{|album| Album.new(album)}
-    return albums
+    result = SqlRunner.run(sql)
+    return albums = result.map{|album| Album.new(album)}
+  end
+
+  def song_by_artist
+    sql = "SELECT * FROM albums SONG artist_id = (#{@id});"
+    result = SqlRunner.run(sql)
+    return songs = result.map {|song| Song.new(song)}
   end
 
 end
